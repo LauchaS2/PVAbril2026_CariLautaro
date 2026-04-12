@@ -10,14 +10,17 @@ export const AuthProvider = ({ children }) => {
 
   //  login
   const iniciarSesion = (email, password) => {
-    const usuarioGuardado = JSON.parse(localStorage.getItem("usuario"));
+    // busca en la lista
+    const listaUsuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-    if (
-      usuarioGuardado &&
-      usuarioGuardado.email === email &&
-      usuarioGuardado.password === password
-    ) {
-      setUsuario(usuarioGuardado);
+    // compara
+    const usuarioEncontrado = listaUsuarios.find(u => 
+      u.email === email && u.password === password
+    );
+
+    // si encuentra, avisa que el usuario se logeo
+    if (usuarioEncontrado) {
+      setUsuario(usuarioEncontrado);
       return true;
     }
 
@@ -26,8 +29,21 @@ export const AuthProvider = ({ children }) => {
 
   //  registro
   const registrarUsuario = (nuevoUsuario) => {
-    localStorage.setItem("usuario", JSON.stringify(nuevoUsuario));
-  };
+  const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+  // 1. Buscamos si ya existe alguien con ese DNI o Email
+  const existe = usuarios.find(u => u.dni === nuevoUsuario.dni || u.email === nuevoUsuario.email);
+
+  if (existe) {
+    alert("Error: El DNI o Email ya se encuentra registrado.");
+    return false; // Cortamos la ejecución aquí
+  }
+
+  // 2. Si no existe, lo agregamos
+  usuarios.push(nuevoUsuario);
+  localStorage.setItem("usuarios", JSON.stringify(usuarios));
+  return true;
+};
 
   //  deslogearse
   const cerrarSesion = () => {
