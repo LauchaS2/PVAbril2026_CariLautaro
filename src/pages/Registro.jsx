@@ -28,8 +28,6 @@ function Registro() {
 
     if (exito) {
       alert("Usuario registrado");
-    } else {
-      alert("Error, ya existe");
     }
   };
 
@@ -38,7 +36,7 @@ function Registro() {
       <h2>Registro de Pasajero - Caserón Antiguo</h2>
       <form onSubmit={manejarSubmit}>
         
-        <input type="text" name="dni" placeholder="DNI (Clave Primaria)" onChange={manejarCambio} required />
+        <input type="text" name="dni" placeholder="DNI" onChange={manejarCambio} required />
         <input type="text" name="apellido" placeholder="Apellido" onChange={manejarCambio} required />
         <input type="text" name="nombre" placeholder="Nombre" onChange={manejarCambio} required />
         
