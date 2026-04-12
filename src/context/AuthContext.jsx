@@ -6,8 +6,9 @@ import { createContext, useState } from "react";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [usuario, setUsuario] = useState(null);
-
+  const [usuario, setUsuario] = useState(
+  JSON.parse(localStorage.getItem("sesion")) || null
+  );
   //  login
   const iniciarSesion = (email, password) => {
     // busca en la lista
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }) => {
     // si encuentra, avisa que el usuario se logeo
     if (usuarioEncontrado) {
       setUsuario(usuarioEncontrado);
+      localStorage.setItem("sesion", JSON.stringify(usuarioEncontrado));
       return true;
     }
 
@@ -29,25 +31,27 @@ export const AuthProvider = ({ children }) => {
 
   //  registro
   const registrarUsuario = (nuevoUsuario) => {
-  const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-  // 1. Buscamos si ya existe alguien con ese DNI o Email
-  const existe = usuarios.find(u => u.dni === nuevoUsuario.dni || u.email === nuevoUsuario.email);
+  // compara el dni y el email
+   const existe = usuarios.find(u => u.dni === nuevoUsuario.dni || u.email === nuevoUsuario.email);
 
-  if (existe) {
-    alert("Error: El DNI o Email ya se encuentra registrado.");
-    return false; // Cortamos la ejecución aquí
-  }
+   if (existe) {
+     alert("Error: El DNI o Email ya se encuentra registrado.");
+     return false; //si encuentra coincidencias, no permite el registro
+   }
 
-  // 2. Si no existe, lo agregamos
-  usuarios.push(nuevoUsuario);
-  localStorage.setItem("usuarios", JSON.stringify(usuarios));
-  return true;
-};
+  // si no encuentra nada, registra
+
+   usuarios.push(nuevoUsuario);
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+    return true;
+  };
 
   //  deslogearse
   const cerrarSesion = () => {
     setUsuario(null);
+    localStorage.removeItem("sesion");
   };
 
   return (

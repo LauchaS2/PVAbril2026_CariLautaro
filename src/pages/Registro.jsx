@@ -24,7 +24,13 @@ function Registro() {
 
   const manejarSubmit = (e) => {
     e.preventDefault();
-    registrarUsuario(formulario);
+    const exito = registrarUsuario(formulario);
+
+    if (exito) {
+      alert("Usuario registrado");
+    } else {
+      alert("Error, ya existe");
+    }
   };
 
   return (

@@ -1,15 +1,15 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-// Componentes de prueba
-const Login = () => <h2>Pantalla de Login</h2>;
-const Register = () => <h2>Pantalla de Registro</h2>;
-const Home = () => <h2>Bienvenido al Hotel (Home)</h2>;
+
+import Login from "../pages/Login";
+import Registro from "../pages/Registro";
+import Home from "../pages/Home";
 
 export const AppRouter = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      <Route path="/register" element={<Registro />} />
       <Route path="/" element={<Home />} />
       
       {/* Por si se cambia la ruta por cualquier cosa random*/}
