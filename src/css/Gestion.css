@@ -1,4 +1,21 @@
+/* Contenedor Principal */
+.gestion-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
 
+.gestion-titulo {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2.2rem;
+  color: #3e2723;
+}
+
+/* Panel de Administrador (Tu código base) */
 .admin-panel {
   background-color: #fdfaf6;
   border: 1px solid #d7ccc8;
@@ -16,7 +33,6 @@
   padding-bottom: 10px;
 }
 
-
 .admin-form {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -24,6 +40,7 @@
   align-items: end;
 }
 
+/* Campos de entrada */
 .input-field, .select-field {
   width: 100%;
   padding: 10px;
@@ -33,39 +50,104 @@
   background-color: white;
 }
 
-.input-field:focus {
-  outline: none;
-  border-color: #8d6e63;
+/* Tabla de Habitaciones */
+.tabla-habitaciones {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: white;
 }
 
-
-.btn-admin-submit {
+.tabla-habitaciones th {
   background-color: #5d4037;
   color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s;
+  padding: 15px;
+  text-align: left;
 }
 
-.btn-admin-submit:hover {
-  background-color: #3e2723;
+.tabla-habitaciones td {
+  padding: 15px;
+  border-bottom: 1px solid #efebe9;
 }
 
+/* Estados */
 .estado-libre {
   color: #2e7d32;
   font-weight: bold;
   background: #e8f5e9;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
 }
 
 .estado-ocupado {
   color: #c62828;
   font-weight: bold;
-  background: #ffeeaa;
-  padding: 4px 8px;
-  border-radius: 4px;
+  background: #ffebee;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+/* Botones */
+.btn-admin-submit, .btn-reserva, .btn-reserva-confirm {
+  background-color: #5d4037;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-reserva:hover, .btn-admin-submit:hover {
+  background-color: #3e2723;
+}
+
+.btn-eliminar {
+  background-color: #ef5350;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Modal de Reserva (Cuando seleccionas una habitación) */
+.reserva-modal {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #efebe9;
+  border-radius: 10px;
+  border-left: 5px solid #5d4037;
+}
+
+.reserva-inputs {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+/* Resumen Final (Operación Exitosa) */
+.resumen-final {
+  margin-top: 30px;
+  padding: 25px;
+  background-color: #e8f5e9;
+  border: 1px solid #c8e6c9;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.resumen-final h3 {
+  color: #2e7d32;
+  margin-bottom: 15px;
+}
+
+.total-destacado {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #1b5e20;
+  margin-top: 10px;
 }
