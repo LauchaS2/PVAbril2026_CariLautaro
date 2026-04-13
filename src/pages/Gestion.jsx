@@ -2,9 +2,12 @@ import { useState, useContext } from "react";
 import { HABITACIONES } from "../data/Habitaciones";
 import { AuthContext } from "../context/AuthContext";
 import "../css/Gestion.css";
+import { Navigate } from 'react-router-dom';
 
 function Gestion() {
   const { usuario } = useContext(AuthContext);
+
+  if (!usuario) return <Navigate to="/login" />;
 
   const [listaHabitaciones, setListaHabitaciones] = useState(() => {
     const guardado = localStorage.getItem("habitaciones_hotel");
