@@ -1,10 +1,11 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom"; // hook, para poder redirigir a las paginas 
+import { useNavigate } from "react-router-dom";
+import "../css/Login.css"; 
 
 function Login() {
   const { iniciarSesion } = useContext(AuthContext);
-  const navigate = useNavigate(); // despues del login, lo manda a home
+  const navigate = useNavigate();
 
   const [credenciales, setCredenciales] = useState({
     email: "",
@@ -24,19 +25,49 @@ function Login() {
 
     if (exito) {
       alert("¡Ingreso exitoso!");
-      navigate("/"); // lo devuelve al home
+      navigate("/"); 
     } else {
       alert("Email o contraseña incorrectos.");
     }
   };
 
   return (
-    <form onSubmit={manejarSubmit}>
-      <h2>Iniciar Sesión</h2>
-      <input type="email" name="email" placeholder="Email" onChange={manejarCambio} required />
-      <input type="password" name="password" placeholder="Password" onChange={manejarCambio} required />
-      <button type="submit">Ingresar</button>
-    </form>
+    <div className="login-container">
+      <div className="login-card">
+        <h2 className="login-titulo">Ingreso a la Casona</h2>
+        <p className="login-subtitulo">Gestioná tu estadía con nosotros</p>
+        
+        <form className="login-form" onSubmit={manejarSubmit}>
+          <div className="form-group">
+            <label>Correo Electrónico</label>
+            <input 
+              type="email" 
+              name="email" 
+              placeholder="ejemplo@correo.com" 
+              onChange={manejarCambio} 
+              required 
+              className="login-input"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Contraseña</label>
+            <input 
+              type="password" 
+              name="password" 
+              placeholder="••••••••" 
+              onChange={manejarCambio} 
+              required 
+              className="login-input"
+            />
+          </div>
+
+          <button type="submit" className="btn-login">
+            Ingresar
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }
 

@@ -1,0 +1,37 @@
+.reservas-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 15px;
+  min-height: 400px;
+}
+
+.reserva-card {
+  border-left: 5px solid #8d6e63;
+  background: #fcfaf9;
+  margin-bottom: 15px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.02);
+}
+
+.reserva-info h4 {
+  margin: 0;
+  color: #5d4037;
+}
+
+.reserva-total {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+.no-reservas {
+  text-align: center;
+  padding: 50px;
+  color: #999;
+}

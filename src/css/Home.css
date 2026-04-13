@@ -1,0 +1,73 @@
+.home-container {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.home-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  color: #5d4037;
+}
+
+.home-subtitle {
+  font-size: 1.2rem;
+  color: #795548;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+.home-hero {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  margin: 40px 0;
+  text-align: left;
+  line-height: 1.8;
+}
+
+.services-grid {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.service-card {
+  flex: 1;
+  background: #fdfaf6;
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid #efebe9;
+  text-align: left;
+}
+
+.service-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.home-cta {
+  margin-top: 50px;
+  padding: 30px;
+  background-color: #efebe9;
+  border-radius: 12px;
+}
+
+.btn-reserva-home {
+  background-color: #8d6e63;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+
+.btn-reserva-home:hover {
+  background-color: #5d4037;
+}

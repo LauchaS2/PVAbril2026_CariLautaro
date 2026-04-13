@@ -1,24 +1,21 @@
 import { useState, useContext } from "react";
 import { HABITACIONES } from "../data/Habitaciones";
 import { AuthContext } from "../context/AuthContext";
+import "../css/Gestion.css";
 
 function Gestion() {
   const { usuario } = useContext(AuthContext);
 
- //cargamos habitaciones
   const [listaHabitaciones, setListaHabitaciones] = useState(() => {
     const guardado = localStorage.getItem("habitaciones_hotel");
     if (guardado) {
       return JSON.parse(guardado);
     } else {
-      // Si es la primera vez de la pagina, carga Habiraciones.jsx y crea el localstorage 
-      // apartir de eso
       localStorage.setItem("habitaciones_hotel", JSON.stringify(HABITACIONES));
       return HABITACIONES;
     }
   });
 
-  // se carga el localstorage de reservas
   const [reservas, setReservas] = useState(() => {
     const guardado = localStorage.getItem("reservas_hotel");
     if (guardado) {
@@ -32,6 +29,34 @@ function Gestion() {
   const [cantidadDias, setCantidadDias] = useState(1);
   const [reservaFinalizada, setReservaFinalizada] = useState(null);
 
+  const [nuevoCodigo, setNuevoCodigo] = useState("");
+  const [nuevoTipo, setNuevoTipo] = useState("Simple");
+  const [nuevoCosto, setNuevoCosto] = useState("");
+  const [nuevaDesc, setNuevaDesc] = useState("");
+
+  const agregarHabitacion = (e) => {
+    e.preventDefault();
+    const nuevaHab = {
+      codigo: Number(nuevoCodigo),
+      tipo: nuevoTipo,
+      costo: Number(nuevoCosto),
+      descripcion: nuevaDesc,
+      estado: "Libre"
+    };
+    const listaActualizada = [...listaHabitaciones, nuevaHab];
+    setListaHabitaciones(listaActualizada);
+    localStorage.setItem("habitaciones_hotel", JSON.stringify(listaActualizada));
+    setNuevoCodigo("");
+    setNuevoCosto("");
+    setNuevaDesc("");
+  };
+
+  const eliminarHabitacion = (codigo) => {
+    const listaActualizada = listaHabitaciones.filter((h) => h.codigo !== codigo);
+    setListaHabitaciones(listaActualizada);
+    localStorage.setItem("habitaciones_hotel", JSON.stringify(listaActualizada));
+  };
+
   const seleccionar = (hab) => {
     if (hab.estado === "Libre") {
       setSeleccionada(hab);
@@ -42,7 +67,6 @@ function Gestion() {
   };
 
   const confirmarReserva = () => {
-    // objeto reserva
     const nuevaReserva = {
       codigoReserva: Math.floor(Math.random() * 10000),
       fecha: new Date().toLocaleDateString(),
@@ -52,7 +76,6 @@ function Gestion() {
       habitacion: seleccionada
     };
 
-    // se marca como ocupada
     const nuevasHabitaciones = listaHabitaciones.map((h) => {
       if (h.codigo === seleccionada.codigo) {
         return { ...h, estado: "Ocupada" };
@@ -60,30 +83,54 @@ function Gestion() {
       return h;
     });
 
-    
     const listaReservasActualizada = [...reservas, nuevaReserva];
     setListaHabitaciones(nuevasHabitaciones);
     setReservas(listaReservasActualizada);
     setReservaFinalizada(nuevaReserva);
     setSeleccionada(null);
 
-    // guardamos en localstorage
     localStorage.setItem("habitaciones_hotel", JSON.stringify(nuevasHabitaciones));
     localStorage.setItem("reservas_hotel", JSON.stringify(listaReservasActualizada));
   };
 
-  const obtenerColor = (estado) => {
-    if (estado === "Libre") {
-      return "green";
+  const renderizarAccionHabitacion = (hab) => {
+    if (usuario.tipo === "Administrador") {
+      return (
+        <button className="btn-eliminar" onClick={() => eliminarHabitacion(hab.codigo)}>
+          Eliminar
+        </button>
+      );
     }
-    return "red";
+    return (
+      <button className="btn-reserva" onClick={() => seleccionar(hab)}>
+        Seleccionar
+      </button>
+    );
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Sistema de Reservas</h2>
+    <div className="gestion-container">
+      <h2 className="gestion-titulo">Panel de Gestión - {usuario.tipo}</h2>
 
-      <table border="1" style={{ width: "100%", marginBottom: "20px" }}>
+      {usuario.tipo === "Administrador" && (
+        <div className="admin-panel">
+          <h3>Añadir Habitación</h3>
+          <form className="admin-form" onSubmit={agregarHabitacion}>
+            <input className="input-field" type="number" placeholder="Código" value={nuevoCodigo} onChange={(e) => setNuevoCodigo(e.target.value)} required />
+            <select className="select-field" value={nuevoTipo} onChange={(e) => setNuevoTipo(e.target.value)}>
+              <option value="Simple">Simple</option>
+              <option value="Doble">Doble</option>
+              <option value="Triple">Triple</option>
+              <option value="Premium">Premium</option>
+            </select>
+            <input className="input-field" type="number" placeholder="Costo" value={nuevoCosto} onChange={(e) => setNuevoCosto(e.target.value)} required />
+            <input className="input-field" type="text" placeholder="Descripción" value={nuevaDesc} onChange={(e) => setNuevaDesc(e.target.value)} />
+            <button className="btn-admin-submit" type="submit">Guardar Nueva</button>
+          </form>
+        </div>
+      )}
+
+      <table className="tabla-habitaciones">
         <thead>
           <tr>
             <th>Código</th>
@@ -99,35 +146,34 @@ function Gestion() {
               <td>{hab.codigo}</td>
               <td>{hab.tipo}</td>
               <td>${hab.costo}</td>
-              <td style={{ color: obtenerColor(hab.estado) }}>{hab.estado}</td>
               <td>
-                <button onClick={() => seleccionar(hab)}>Seleccionar</button>
+                <span className={hab.estado === "Libre" ? "estado-libre" : "estado-ocupado"}>
+                  {hab.estado}
+                </span>
               </td>
+              <td>{renderizarAccionHabitacion(hab)}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
       {seleccionada && (
-        <div style={{ border: "2px solid blue", padding: "10px" }}>
+        <div className="reserva-modal">
           <h3>Reservando: {seleccionada.tipo} (Código: {seleccionada.codigo})</h3>
-          <label>Días: </label>
-          <input 
-            type="number" 
-            value={cantidadDias} 
-            min="1" 
-            onChange={(e) => setCantidadDias(e.target.value)} 
-          />
-          <button onClick={confirmarReserva}>Confirmar</button>
+          <div className="reserva-inputs">
+            <label>Días: </label>
+            <input className="input-field" type="number" value={cantidadDias} min="1" onChange={(e) => setCantidadDias(e.target.value)} />
+            <button className="btn-reserva-confirm" onClick={confirmarReserva}>Confirmar Reserva</button>
+          </div>
         </div>
       )}
 
       {reservaFinalizada && (
-        <div style={{ marginTop: "20px", border: "2px solid green", padding: "15px" }}>
-          <h3>Resumen de la Operación</h3>
-          <p>DNI: {reservaFinalizada.pasajero.dni}</p>
-          <p>Habitación: {reservaFinalizada.habitacion.codigo} ({reservaFinalizada.habitacion.tipo})</p>
-          <p>Costo Total: ${reservaFinalizada.total}</p>
+        <div className="resumen-final">
+          <h3>✔ Operación Exitosa</h3>
+          <p><strong>DNI Pasajero:</strong> {reservaFinalizada.pasajero.dni}</p>
+          <p><strong>Habitación:</strong> {reservaFinalizada.habitacion.codigo} ({reservaFinalizada.habitacion.tipo})</p>
+          <p className="total-destacado">Total Pagado: ${reservaFinalizada.total}</p>
         </div>
       )}
     </div>
