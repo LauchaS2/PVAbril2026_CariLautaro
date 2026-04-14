@@ -7,6 +7,9 @@ function Registro() {
   const { registrarUsuario } = useContext(AuthContext);
   const navigate = useNavigate();
 
+
+
+
   const [formulario, setFormulario] = useState({
     dni: "",
     apellido: "",
@@ -18,8 +21,10 @@ function Registro() {
     password: "",
   });
 
+
+
   const manejarCambio = (e) => {
-    setFormulario({
+    setFormulario({ 
       ...formulario,
       [e.target.name]: e.target.value,
     });
@@ -27,9 +32,39 @@ function Registro() {
 
   const manejarSubmit = (e) => {
     e.preventDefault();
-    const exito = registrarUsuario(formulario);
+
+
+    const dniNum = formulario.dni;
+    if ( dniNum < 999999 || dniNum > 100000000) {
+      alert("El DNI debe ser un número válido entre 999,999 y 100,000,000."); //hacemos que valide el rango valido del dni
+      return;
+    }
+
+    const soloLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/; //le damos a la variable los datos validos que puede usar el campo
+    if (!soloLetras.test(formulario.nombre) || !soloLetras.test(formulario.apellido)) { //comprovbamos si lo que escribio el usuario encaja con la condicion
+      alert("Nombre y Apellido solo pueden contener letras.");
+      return;
+    }
+    
+    const hoy = new Date();
+    const fechaNac = new Date(formulario.fechaNacimiento);
+    let edad = hoy.getFullYear() - fechaNac.getFullYear(); //sacamos la edad
+    const mes = hoy.getMonth() - fechaNac.getMonth(); // vemos si ya paso el mes de cumpleaños
+   
+    if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNac.getDate())) {
+      edad--;  // se hace un condicional para saber si ya cumplio años este año
+    }
+
+    if (edad < 18) {
+      alert("Debes ser mayor de 18 años para registrarte.");
+      return;
+    }
+
+   
+    const exito = registrarUsuario(formulario); 
+  
     if (exito) {
-      alert("¡Usuario registrado con éxito!");
+      alert("¡Usuario registrado con éxito!"); 
       navigate("/login");
     }
   };
@@ -43,8 +78,8 @@ function Registro() {
         <form className="login-form" onSubmit={manejarSubmit}>
           
           <div className="form-group">
-            <label>Documento (DNI)</label>
-            <input className="login-input" type="text" name="dni" placeholder="DNI" onChange={manejarCambio} required />
+            <label>Documento (DNI)</label> 
+            <input className="login-input" type="number" name="dni" placeholder="DNI" onChange={manejarCambio} required />
           </div>
 
           <div className="form-group">
